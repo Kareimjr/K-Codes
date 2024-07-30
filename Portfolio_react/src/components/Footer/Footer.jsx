@@ -1,7 +1,6 @@
 import React from 'react'
 import './Footer.css'
-import footer_logo from '../../assets/footer_logo.svg'
-import user_icon from '../../assets/user_icon.svg'
+import footer_logo from '../../assets/Logo.png'
 
 const Footer = () => {
   return (
@@ -10,13 +9,6 @@ const Footer = () => {
             <div className="footer-top-left">
             <img src={footer_logo} />
             <p>I am a full-stack developer from Nigeria with over two years of experience</p>
-            </div>
-            <div className="footer-top-right">
-                <div className="footer-email-input">
-                <img src={user_icon} />
-                <input type="email" placeholder='Enter your email' />
-                </div>
-                <div className="footer-subscribe">Subscribe</div>
             </div>
         </div>
         <hr />

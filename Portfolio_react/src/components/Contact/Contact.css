@@ -175,3 +175,66 @@
         padding: 15px 40px;
     }
 }
+
+@media(max-width: 600px) {
+    .contact {
+        gap: 50px;
+        margin: 50px 40px;
+        align-items: start;
+    }
+
+    .contact-title h1 {
+        padding: 0;
+        font-size: 40px;
+        font-weight: 600;
+    }
+
+    .contact-title img {
+        width: 80px;
+        margin-right: -20px;
+    }
+
+    .contact-section {
+        flex-direction: column;
+    }
+
+    .contact-left h1 {
+        font-size: 45px;
+    }
+
+    .contact-left p {
+        font-size: 16px;
+        line-height: 25px;
+    }
+
+    .contact-detail {
+        gap: 20px;
+    }
+
+    .contact-detail img {
+        width: 20px;
+    }
+
+    .contact-right {
+        max-width: 90%;
+    }
+
+    .contact-right label {
+        font-size: 16px;
+    }
+
+    .contact-right input {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .contact-right textarea {
+        width: 95%;
+        font-size: 16px;
+    }
+
+    .contact-submit {
+        font-size: 16px;
+        padding: 10px 30px;
+    }
+}

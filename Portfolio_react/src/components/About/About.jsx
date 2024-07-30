@@ -1,7 +1,7 @@
 import React from 'react'
 import './About.css'
 import theme_pattern from '../../assets/theme_pattern.svg'
-import profile_img from '../../assets/about_profile.svg'
+import profile_img from '../../assets/picture2.png'
 
 const About = () => {
     return (
@@ -23,10 +23,10 @@ const About = () => {
                         <p>My passion for web development is not only reflected in my experience but also in the enthusiam and dedication i bring to each project.</p>
                     </div>
                     <div className="about-skills">
-                    <div className="about-skill" ><p>HTML & CSS</p><hr style={{width:"50%"}}/></div>
-                    <div className="about-skill" ><p>React JS</p><hr style={{width:"70%"}}/></div>
-                    <div className="about-skill" ><p>Javascript</p><hr style={{width:"30%"}}/></div>
-                    <div className="about-skill" ><p>Node JS</p><hr style={{width:"50%"}}/></div>
+                    <div className="about-skill" ><p>HTML & CSS</p><hr style={{width:"70%"}}/></div>
+                    <div className="about-skill" ><p>React JS</p><hr style={{width:"60%"}}/></div>
+                    <div className="about-skill" ><p>Javascript</p><hr style={{width:"65%"}}/></div>
+                    <div className="about-skill" ><p>Node JS</p><hr style={{width:"40%"}}/></div>
                     </div>
 
                      </div>
