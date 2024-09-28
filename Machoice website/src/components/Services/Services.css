@@ -37,3 +37,94 @@
 .services b {
     font-size: 30px;
 }
+
+@media(max-width: 975px) {
+    .services {
+        padding: 40px 85px;
+    }
+    .services h1 {
+        font-size: 30px;
+    }
+    .services hr {
+        margin: 10px 0px;
+    }
+    .services p {
+        line-height: 25px;
+        font-size: 18px;
+    }
+    
+    .retail, .wholesales {
+        margin-top:20px;
+    }
+    
+    .products {
+        margin-top: 40px;
+    }
+    
+    .product-items {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .card img {
+        width: 120px;
+    }
+    .services b {
+        font-size: 25px;
+    }
+}
+
+@media(max-width: 620px) {
+    .services {
+        padding: 20px 55px;
+    }
+    .product-items {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    
+}
+
+@media(max-width: 500px) {
+    .services {
+        padding: 25px 35px;
+    }
+    .services h1 {
+        font-size: 25px;
+    }
+    .services p {
+        line-height: 25px;
+        font-size: 16px;
+    }
+    
+    .retail, .wholesales {
+        margin-top:20px;
+    }
+    
+    .products {
+        margin-top: 30px;
+    }
+    
+    .product-items {
+        display: grid;
+        grid-template-columns: 1fr;
+        margin-left: 80px;
+    }
+    
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .card img {
+        width: 150px;
+    }
+    .services b {
+        font-size: 30px;
+    }
+}
