@@ -41,29 +41,31 @@
     }
 }
 
-@media(max-width: 768px) {
+@media(max-width: 620px) {
     .about-us {
-        padding: 40px 90px;
+        padding: 25px 60px;
+    }
+}
+
+@media(max-width: 500px) {
+    .about-us {
+        padding: 30px 40px;
     }
     
     .about-us h1 {
-        font-size: 30px;
+        font-size: 25px;
     }
     .about-us h3 {
-        font-size: 20px;
+        font-size: 18px;
     }
     .about-us hr {
         margin: 10px 0px;
     }
     .about-us p {
         line-height: 25px;
-        font-size: 18px;
+        font-size: 16px;
     }
     .mission, .value {
         margin-top:20px;
     }
-}
-
-@media(max-width: 480px) {
-    
 }
