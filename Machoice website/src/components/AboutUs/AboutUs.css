@@ -20,7 +20,7 @@
 
 @media(max-width: 975px) {
     .about-us {
-        padding: 40px 90px;
+        padding: 40px 85px;
     }
     
     .about-us h1 {
@@ -43,13 +43,13 @@
 
 @media(max-width: 620px) {
     .about-us {
-        padding: 25px 60px;
+        padding: 25px 55px;
     }
 }
 
 @media(max-width: 500px) {
     .about-us {
-        padding: 30px 40px;
+        padding: 30px 35px;
     }
     
     .about-us h1 {
