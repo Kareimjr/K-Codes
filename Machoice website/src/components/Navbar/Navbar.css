@@ -107,3 +107,31 @@
 
 
 }
+
+@media(max-width: 768px) {
+    .navbar {
+        padding: 15px 30px;
+    }
+    .nav-logo {
+        width: 200px;
+    }
+
+    .nav-mob-open {
+        width: 25px;
+        right: 25px;
+    }
+}
+
+@media(max-width: 480px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    .nav-logo {
+        width: 160px;
+    }
+
+    .nav-mob-open {
+        width: 20px;
+        right: 15px;
+    }
+}
