@@ -17,3 +17,53 @@
 .mission, .value {
     margin-top:25px;
 }
+
+@media(max-width: 975px) {
+    .about-us {
+        padding: 40px 90px;
+    }
+    
+    .about-us h1 {
+        font-size: 30px;
+    }
+    .about-us h3 {
+        font-size: 20px;
+    }
+    .about-us hr {
+        margin: 10px 0px;
+    }
+    .about-us p {
+        line-height: 25px;
+        font-size: 18px;
+    }
+    .mission, .value {
+        margin-top:20px;
+    }
+}
+
+@media(max-width: 768px) {
+    .about-us {
+        padding: 40px 90px;
+    }
+    
+    .about-us h1 {
+        font-size: 30px;
+    }
+    .about-us h3 {
+        font-size: 20px;
+    }
+    .about-us hr {
+        margin: 10px 0px;
+    }
+    .about-us p {
+        line-height: 25px;
+        font-size: 18px;
+    }
+    .mission, .value {
+        margin-top:20px;
+    }
+}
+
+@media(max-width: 480px) {
+    
+}
