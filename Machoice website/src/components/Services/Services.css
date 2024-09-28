@@ -1,0 +1,39 @@
+.services {
+    background: linear-gradient(135deg, #fffde7 0%, #e0f7fa 100%);
+    padding: 40px 160px;
+}
+.services h1 {
+    font-size: 50px;
+}
+.services hr {
+    margin: 10px 0px;
+}
+.services p {
+    line-height: 30px;
+    font-size: 20px;
+}
+
+.retail, .wholesales {
+    margin-top:25px;
+}
+
+.products {
+    margin-top: 40px;
+}
+
+.product-items {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.card img {
+    width: 150px;
+}
+.services b {
+    font-size: 30px;
+}

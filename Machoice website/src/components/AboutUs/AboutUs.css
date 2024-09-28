@@ -1,0 +1,19 @@
+.about-us {
+    padding: 40px 160px;
+}
+.about-us h1 {
+    font-size: 50px;
+}
+.about-us h3 {
+    font-size: 30px;
+}
+.about-us hr {
+    margin: 10px 0px;
+}
+.about-us p {
+    line-height: 30px;
+    font-size: 20px;
+}
+.mission, .value {
+    margin-top:25px;
+}

@@ -31,7 +31,7 @@ const Contact = () => {
                         </div>
                     </div>
                 </div>
-                <form action="" className="contact-right">
+                <form action="https://formsubmit.co/officialkareim@gmail.com" method="POST" className="contact-right">
                     <label htmlFor="">Your Name</label>
                     <input type="text" placeholder='Enter your name' name='name' />
                     <label htmlFor="">Your Email</label>
@@ -40,6 +40,7 @@ const Contact = () => {
                     <textarea name="message" row='8' placeholder='Enter your message'></textarea>
                     <button className="contact-submit" type='submit'>Submit</button>
                 </form>
+                
             </div>
         </div>
     )
