@@ -8,7 +8,7 @@ const Contact = () => {
     return (
         <div id='contact' className='contact'>
             <div className="contact-title">
-                <b>How can we help you today ?</b>
+                <h1>How can we help you today ?</h1>
             </div>
             <div className="contact-section">
                 <div className="contact-left">
@@ -16,11 +16,11 @@ const Contact = () => {
                     <div className="contact-details">
                         <div className="contact-detail">
                             <img src={mail_icon} />
-                            <p>officialkareim@hotmail.com</p>
+                            <p>Atolagbemaryam@gmail.com</p>
                         </div>
                         <div className="contact-detail">
                             <img src={call_icon} />
-                            <p>+234-8133778892</p>
+                            <p>+234-9031293646</p>
                         </div>
                         <div className="contact-detail">
                             <img src={location_icon} />
@@ -28,7 +28,7 @@ const Contact = () => {
                         </div>
                     </div>
                 </div>
-                <form action="https://formsubmit.co/officialkareim@gmail.com" method="POST" className="contact-right">
+                <form action="https://formsubmit.co/atolagbemaryam@gmail.com" method="POST" className="contact-right">
                     <label htmlFor="">Your Name</label>
                     <input type="text" placeholder='Enter your name' name='name' />
                     <label htmlFor="">Your Email</label>
