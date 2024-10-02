@@ -20,7 +20,7 @@ const Footer = () => {
             <a href="https://www.facebook.com/profile.php?id=100081302916321&mibextid=LQQJ4d"><i className="fa-brands fa-square-facebook" style={{color: '#6c757d'}}></i></a>
             <a href="https://www.instagram.com/machoice_nigeria?igsh=MXNtemIzZ2V4M3Fqbw=="><i className="fa-brands fa-square-instagram" style={{color: '#6c757d'}}></i></a>
             <a href="https://x.com/machoicenigeria?s=11"><i className="fa-brands fa-square-x-twitter" style={{color: '#6c757d'}}></i></a>
-            <a href="#"><i className="fa-brands fa-square-whatsapp" style={{color: '#6c757d'}}></i></a>
+            <a href="http://wa.me/2349031293646"><i className="fa-brands fa-square-whatsapp" style={{color: '#6c757d'}}></i></a>
           </div>
         </div>
       </div>
