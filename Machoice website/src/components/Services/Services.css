@@ -38,6 +38,34 @@
     font-size: 30px;
 }
 
+#eco-top-up{
+    margin-top: 35px;
+}
+
+.how-it-works span {
+    font-weight: bold;
+}
+
+.how-it-works ul li {
+    margin-top: 5px;
+    list-style: circle;
+}
+
+.why-refill{
+    margin-top: 20px;
+}
+.why-refill ul li {
+    margin-top: 5px;
+}
+.why-refill span{
+    font-weight: bold;
+}
+
+.how-it-works{
+    margin-top: 20px;
+}
+
+
 @media(max-width: 975px) {
     .services {
         padding: 40px 85px;

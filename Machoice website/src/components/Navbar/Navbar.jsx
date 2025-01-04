@@ -26,6 +26,7 @@ const Navbar = () => {
                     <a href="#about-us"><li>About Us</li></a>
                     <a href="#services"><li>Services</li></a>
                     <a href="#products"><li>Products</li></a>
+                    <a href="#eco-top-up"><li>Eco-Top-Up</li></a>
                     <a href="#contact"><button>Contact Us</button></a>
                 </ul>
 

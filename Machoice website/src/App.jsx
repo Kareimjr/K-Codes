@@ -4,6 +4,7 @@ import Footer from './components/Footer/Footer'
 import Hero from './components/Hero/Hero'
 import Navbar from './components/Navbar/Navbar'
 import Services from './components/Services/Services'
+import Testimonial from './components/Testimonial/Testimonial'
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
       <Hero/>
       <AboutUs/>
       <Services/>
+      <Testimonial/>
       <Contact/>
       <Footer/>
     </div>

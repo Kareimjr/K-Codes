@@ -11,11 +11,11 @@ const Add = () => {
           <label htmlFor="image">
             <img src={assets.upload_area} alt="" />
           </label>
-            <input type="file" id='image' hidden required />
+          <input type="file" id='image' hidden required />
         </div>
         <div className="add-product-name flex-col">
-           <p>Product name</p>
-           <input type="text" name="name" placeholder='Type here...' />
+          <p>Product name</p>
+          <input type="text" name="name" placeholder='Type here...' />
         </div>
         <div className="add-product-description flex-col">
           <p>Product description</p>
@@ -36,9 +36,9 @@ const Add = () => {
             </select>
           </div>
           <div className="add-price flex-col">
-          <p>Product price</p>
-          <input type="number" name="price" placeholder="$20" />
-        </div>
+            <p>Product price</p>
+            <input type="number" name="price" placeholder="$20" />
+          </div>
         </div>
         <button type='submit' className='add-btn'>ADD</button>
       </form>
