@@ -1,5 +1,6 @@
 import React from 'react';
 import { Edit, Trash2 } from 'lucide-react';
+import { assets } from '../assets/asset';
 
 // Mock data (replace with database fetch)
 const products = [
@@ -33,7 +34,7 @@ const ListOfProducts = () => {
             <div>
               <div className="flex-shrink-0">
                 <img
-                  src={product.image}
+                  src={assets.product1}
                   alt={product.name}
                   className="w-16 h-16 md:w-20 md:h-20 object-cover rounded"
                 />

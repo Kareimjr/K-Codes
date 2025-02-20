@@ -18,6 +18,7 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
           <div className="flex items-center">
             <Link to={isAdmin ? "/admin" : "/"} className="flex items-center">
               <img src={assets.logo} alt="Logo" className="h-20 w-auto" />
+              <h2 className='font-bold text-[#6A3917]'>Admin Panel</h2>
             </Link>
           </div>
 
