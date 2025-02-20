@@ -6,7 +6,7 @@ import ListOfProducts from './pages/ListOfProducts';
 import Orders from './pages/Orders';
 import CompletedOrders from './pages/CompletedOrders';
 import Branding from './pages/Branding';
-import Coupons from './pages/coupons';
+import Coupons from './pages/Coupons';
 
 const App = () => {
   const handleLogout = () => {
