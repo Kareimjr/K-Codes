@@ -7,6 +7,9 @@ import Orders from './pages/Orders';
 import CompletedOrders from './pages/CompletedOrders';
 import Branding from './pages/Branding';
 import Coupons from './pages/Coupons';
+import AdminLogin from './pages/AdminLogin';
+import AdminResetPassword from './pages/ResetPassword';
+import CanceledOrders from './pages/CanceledOrder';
 
 const App = () => {
   const handleLogout = () => {
@@ -16,12 +19,15 @@ const App = () => {
 
   return (
     <Routes>
+      <Route path="/auth" element={<AdminLogin />} />
+      <Route path='/reset-password' element={<AdminResetPassword />} />
       <Route path="/" element={<AdminLayout onLogout={handleLogout} />}>
         {/* Nested routes */}
         <Route path="add-product" element={<AddProduct />} />
         <Route path="products" element={<ListOfProducts />} />
         <Route path="orders" element={<Orders />} />
         <Route path="completed-orders" element={<CompletedOrders />} />
+        <Route path="canceled-orders" element={<CanceledOrders />} />
         <Route path="branding" element={<Branding />} />
         <Route path="coupons" element={<Coupons />} />
         {/* Optional: Add a default route for the admin dashboard */}

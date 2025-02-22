@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 
 const initialCoupons = [
-  { id: 1, title: 'SUMMER10', discount: 10, usageLimit: 100, expiration: '2023-12-31' },
+  { id: 1, title: 'SUMMER10', discount: 10, usageLimit: 100, usageCount: 0, expiration: '2023-12-31' },
 ];
 
 const Coupons = () => {
   const [coupons, setCoupons] = useState(initialCoupons);
-  const [newCoupon, setNewCoupon] = useState({ title: '', discount: '', usageLimit: '', expiration: '' });
+  const [newCoupon, setNewCoupon] = useState({ title: '', discount: '', usageLimit: '', usageCount: 0, expiration: '' });
 
   const handleAddCoupon = (e) => {
     e.preventDefault();
-    const coupon = { ...newCoupon, id: Date.now() }; // Temporary ID, replace with backend-generated ID
+    const coupon = { ...newCoupon, id: Date.now(), usageCount: 0 }; // Temporary ID, replace with backend-generated ID
     setCoupons([...coupons, coupon]);
-    setNewCoupon({ title: '', discount: '', usageLimit: '', expiration: '' });
+    setNewCoupon({ title: '', discount: '', usageLimit: '', usageCount: 0, expiration: '' });
     // Add your backend API call here to save the coupon
   };
 
@@ -23,7 +23,7 @@ const Coupons = () => {
   };
 
   return (
-    <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg">
+    <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg max-w-3xl mx-auto">
       <h2 className="text-lg md:text-2xl font-bold mb-4 md:mb-6 text-[#6A3917]">Coupons</h2>
 
       {/* Add Coupon Form */}
@@ -74,7 +74,7 @@ const Coupons = () => {
         {coupons.map((coupon) => (
           <div
             key={coupon.id}
-            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative" // Added 'relative' for positioning context
+            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative"
           >
             {/* Coupon Icon (Using a gift icon as a placeholder, similar to package) */}
             <div className="flex-shrink-0 mb-2">
@@ -87,7 +87,7 @@ const Coupons = () => {
                 {coupon.title} - {coupon.discount}% Off
               </p>
               <p className="text-sm text-[#6A3917]">
-                Usage Limit: {coupon.usageLimit}
+                Usage: {coupon.usageCount}/{coupon.usageLimit}
                 <br />
                 Expires: {new Date(coupon.expiration).toLocaleDateString()}
               </p>

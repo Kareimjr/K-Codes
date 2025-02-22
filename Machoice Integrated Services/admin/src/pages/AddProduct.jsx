@@ -1,4 +1,3 @@
-// src/pages/admin/AddProduct.js
 import React, { useState } from 'react';
 
 const AddProduct = () => {
@@ -7,6 +6,7 @@ const AddProduct = () => {
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
+  const [isBestSeller, setIsBestSeller] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -19,13 +19,20 @@ const AddProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const product = { image, name, description, quantity: Number(quantity), price: Number(price) };
+    const product = { 
+      image, 
+      name, 
+      description, 
+      quantity: Number(quantity), 
+      price: Number(price),
+      isBestSeller 
+    };
     console.log('Product to add:', product);
     // Add backend API call here
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto">
+    <div className="bg-white p-6 rounded-xl shadow-lg max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-[#6A3917]">Add Product</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -89,6 +96,17 @@ const AddProduct = () => {
             step="0.01"
             required
           />
+        </div>
+        <div>
+          <label className="flex items-center gap-2 text-[#6A3917] font-medium">
+            <input
+              type="checkbox"
+              checked={isBestSeller}
+              onChange={(e) => setIsBestSeller(e.target.checked)}
+              className="w-4 h-4"
+            />
+            Mark as Best Seller
+          </label>
         </div>
         <button
           type="submit"

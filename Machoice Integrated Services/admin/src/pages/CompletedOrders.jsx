@@ -22,7 +22,7 @@ const CompletedOrders = () => {
   );
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
+    <div className="bg-white max-w-3xl mx-auto p-6 rounded-xl shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-[#6A3917]">Completed Orders</h2>
       <div className="mb-4">
         <input

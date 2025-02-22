@@ -1,42 +1,43 @@
 import React, { useState } from 'react';
 
-const initialOrders = [
+const canceledOrders = [
   {
-    id: 1,
-    date: '2023-10-01 14:30',
-    customerName: 'John Doe',
-    address: '123 Main St',
+    id: 3,
+    date: '2023-11-15 14:30',
+    customerName: 'John Smith',
+    address: '789 Pine St',
     phone: '08012345678',
-    items: [{ productName: 'Product A', quantity: 2 }, 
-            { productName: 'Product B', quantity: 1 },
-    ],
-    total: 2000,
+    items: [{ productName: 'Product 3', quantity: 2 }],
+    total: 3500,
     paymentMethod: 'online',
-    paymentStatus: 'success',
-    orderStatus: 'processing',
+    orderStatus: 'canceled',
   },
 ];
 
-const Orders = () => {
-  const [orders, setOrders] = useState(initialOrders);
+const CanceledOrders = () => {
+  const [searchDate, setSearchDate] = useState('');
 
-  const handleStatusChange = (id, newStatus) => {
-    const updatedOrders = orders.map((order) =>
-      order.id === id ? { ...order, orderStatus: newStatus } : order
-    );
-    setOrders(updatedOrders.filter((order) => order.orderStatus !== 'delivered'));
-    console.log(`Order ${id} status updated to ${newStatus}`);
-    // Update backend here
-  };
+  const filteredOrders = canceledOrders.filter((order) =>
+    order.date.toLowerCase().includes(searchDate.toLowerCase())
+  );
 
   return (
     <div className="bg-white max-w-3xl mx-auto p-6 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-[#6A3917]">Orders</h2>
+      <h2 className="text-2xl font-bold mb-6 text-[#6A3917]">Canceled Orders</h2>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search by date (e.g., 2023-11-15)"
+          value={searchDate}
+          onChange={(e) => setSearchDate(e.target.value)}
+          className="w-full p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
+        />
+      </div>
       <div className="space-y-4">
-        {orders.map((order) => (
+        {filteredOrders.map((order) => (
           <div
             key={order.id}
-            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative" // Added 'relative' for positioning context
+            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative"
           >
             {/* Package Icon */}
             <div className="flex-shrink-0 mb-4">
@@ -64,28 +65,24 @@ const Orders = () => {
                 <br />
                 Order ID: {order.id}
                 <br />
-                Payment: {order.paymentMethod === 'online' 
-                  ? `Online (${order.paymentStatus})` 
-                  : 'COD'}
+                Payment: {order.paymentMethod === 'online' ? 'Online' : 'COD'}
               </p>
             </div>
 
             {/* Items Count and Total */}
             <div className="text-right flex-shrink-0 space-y-1 mt-4 md:mt-2">
               <p className="text-sm text-[#6A3917]">Items: {order.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
-              <p className="text-lg font-bold text-[#6A3917]">₦ {order.total.toLocaleString()}</p>
+              <p className="text-lg font-bold text-[#6A3917]">₦{order.total.toLocaleString()}</p>
             </div>
 
-            {/* Status Dropdown - Positioned at top right using absolute positioning */}
+            {/* Status (Read-only) - Positioned at top right using absolute positioning */}
             <div className="absolute top-3 right-3 flex-shrink-0">
               <select
                 value={order.orderStatus}
-                onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                className="p-1 border border-[#A67C52] rounded bg-white focus:outline-none focus:border-[#6A3917]"
+                disabled
+                className="p-1 border border-[#A67C52] rounded bg-white text-[#6A3917] cursor-not-allowed"
               >
-                <option value="processing">Order Processing</option>
-                <option value="out for delivery">Out for Delivery</option>
-                <option value="delivered">Delivered</option>
+                <option value="canceled">Canceled</option>
               </select>
             </div>
           </div>
@@ -95,4 +92,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default CanceledOrders;

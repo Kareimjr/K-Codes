@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, UserPlus } from 'lucide-react';
 import { Transition } from '@headlessui/react';
 import { assets } from '../assets/asset';
 
@@ -46,10 +46,10 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
       {/* Mobile Menu with Transition */}
       <Transition
         show={mobileMenuOpen}
-        enter="transition-opacity duration-600 ease-out"
+        enter="transition-opacity duration-800 ease-out"
         enterFrom="opacity-0"
         enterTo="opacity-100"
-        leave="transition-opacity duration-400 ease-in"
+        leave="transition-opacity duration-200 ease-in"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
@@ -67,6 +67,13 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
             ))}
             {isAdmin && onLogout && (
               <div className="pt-4 border-t">
+                <Link
+                  to="/create-admin"
+                  className="ml-8 mb-2 block mobile-nav-link text-[#6A3917] hover:text-[#5A2F13]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Create Admin
+                </Link>
                 <button
                   onClick={() => {
                     onLogout();

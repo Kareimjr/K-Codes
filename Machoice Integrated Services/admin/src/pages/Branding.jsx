@@ -38,7 +38,7 @@ const Branding = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg max-w-4xl mx-auto">
+    <div className="bg-white p-6 rounded-xl shadow-lg max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-[#6A3917]">Branding</h2>
       <div className="space-y-8">
         {/* Favicon */}
