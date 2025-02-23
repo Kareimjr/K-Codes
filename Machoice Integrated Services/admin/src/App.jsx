@@ -10,6 +10,7 @@ import Coupons from './pages/Coupons';
 import AdminLogin from './pages/AdminLogin';
 import AdminResetPassword from './pages/ResetPassword';
 import CanceledOrders from './pages/CanceledOrder';
+import { assets } from './assets/asset';
 
 const App = () => {
   const handleLogout = () => {
