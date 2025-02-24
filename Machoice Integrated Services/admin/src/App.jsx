@@ -33,12 +33,12 @@ const App = () => {
         <Route path="coupons" element={<Coupons />} />
         {/* Optional: Add a default route for the admin dashboard */}
         <Route index element={
-          <div className="h-screen flex items-center justify-center">
-            <div className="flex flex-col items-center text-2xl text-[#6A3917] md:text-3xl font-extrabold">
-              <img src={assets.logo} className='w-32 h-auto' />
-              Welcome to Admin Panel
-            </div>
-          </div>} />
+          <div className="max-h-screen mt-[25vh] flex items-center justify-center">
+          <div className="flex flex-col items-center text-2xl text-[#6A3917] md:text-3xl font-extrabold">
+          <img src={assets.logo} className='w-32 h-auto mb-5' />
+            Welcome to Admin Panel
+          </div>
+        </div>} />
       </Route>
       {/* Add other top-level routes here if needed */}
     </Routes>
