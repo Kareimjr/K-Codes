@@ -1,24 +1,7 @@
 const userModel = require('../models/userModel.js');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const transporter = require('../config/nodemailer.js');
 const { WELCOME_EMAIL_TEMPLETE, RESET_PASSWORD_EMAIL_TEMPLETE } = require('../config/emailTemplates.js');
-
-// Helper Function to Generate JWT
-const generateToken = (user) => {
-    return jwt.sign(
-        {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            residence: user.residence,
-            role: user.role,
-        },
-        // Ensure JWT_SECRET is trimmed here as well for consistency
-        process.env.JWT_SECRET.trim(),
-        { expiresIn: '7d' }
-    );
-};
 
 // REGISTER USER
 const register = async (req, res) => {
@@ -38,14 +21,10 @@ const register = async (req, res) => {
         const user = new userModel({ name, email, residence, password: hashedPassword });
         await user.save();
 
-        const token = generateToken(user);
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        // Set session variable after successful registration
+        req.session.userId = user._id;
 
+        // Send welcome email
         await transporter.sendMail({
             from: process.env.SENDER_EMAIL,
             to: email,
@@ -57,8 +36,13 @@ const register = async (req, res) => {
             success: true,
             message: 'Registration completed successfully',
             data: {
-                token,
-                user: { id: user._id, name: user.name, email: user.email, residence: user.residence, role: user.role }
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    residence: user.residence,
+                    role: user.role,
+                }
             }
         });
     } catch (error) {
@@ -81,20 +65,20 @@ const login = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Invalid Email or Password' });
         }
 
-        const token = generateToken(user);
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        // Set session variable after successful login
+        req.session.userId = user._id;
 
         return res.status(200).json({
             success: true,
             message: 'User logged in successfully',
             data: {
-                token,
-                user: { id: user._id, name: user.name, email: user.email, residence: user.residence, role: user.role }
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    residence: user.residence,
+                    role: user.role,
+                }
             }
         });
     } catch (error) {
@@ -106,12 +90,14 @@ const login = async (req, res) => {
 // USER LOGOUT
 const logout = (req, res) => {
     try {
-        res.clearCookie('token', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        req.session.destroy((err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: 'Internal Server Error' });
+            }
+            res.clearCookie('connect.sid'); // Clear the session cookie
+            return res.status(200).json({ success: true, message: 'User logged out successfully' });
         });
-        return res.status(200).json({ success: true, message: 'User logged out successfully' });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -184,7 +170,11 @@ const resetPassword = async (req, res) => {
 // AUTHENTICATION CHECK
 const isAuthenticated = (req, res) => {
     try {
-        return res.status(200).json({ success: true });
+        if (req.session && req.session.userId) {
+            return res.status(200).json({ success: true });
+        } else {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: 'Internal Server Error' });

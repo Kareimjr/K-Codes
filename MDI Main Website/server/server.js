@@ -13,9 +13,8 @@ const studentCourseProgressRoute = require("./routes/studentRoutes/courseProgres
 const studentBoughtCoursesRoutes = require("./routes/studentRoutes/studentCoursesRoute.js");
 const brandingRoutes = require('./routes/brandingRoute.js');
 
-
-
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const WebSocket = require('ws');
 
 const app = express();
@@ -31,8 +30,22 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Parse JSON, URL-encoded data, and cookies
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Session middleware configuration
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        // Optionally, add cookie settings such as secure flag in production:
+        // cookie: { secure: process.env.NODE_ENV === 'production' }
+    })
+);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Database connection
@@ -51,9 +64,7 @@ app.use('/student/courses-bought', studentBoughtCoursesRoutes);
 app.use('/student/course-progress', studentCourseProgressRoute);
 app.use('/api/branding', brandingRoutes);
 
-
-
-
+// Global error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({

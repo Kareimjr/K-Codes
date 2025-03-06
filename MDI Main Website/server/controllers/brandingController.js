@@ -34,7 +34,7 @@ const handleFileUpload = async (file, allowedTypes) => {
 
   // Build the URL for accessing this file.
   // Ensure that your Express app serves the "public" folder as static.
-  const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = process.env.BACKEND_URL;
   return {
     url: `${backendUrl}/uploads/${filename}`,
     mimetype: file.mimetype,
