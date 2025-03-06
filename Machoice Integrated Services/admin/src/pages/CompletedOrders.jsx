@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-
-const completedOrders = [
-  {
-    id: 2,
-    date: '2023-10-02 10:00',
-    customerName: 'Jane Doe',
-    address: '456 Oak St',
-    phone: '08098765432',
-    items: [{ productName: 'Product 2', quantity: 1 }],
-    total: 2000,
-    paymentMethod: 'cod',
-    orderStatus: 'delivered',
-  },
-];
+// src/pages/CompletedOrders.js
+import React, { useState, useEffect } from 'react';
+import { getCompletedOrders } from '../services/services';
 
 const CompletedOrders = () => {
+  const [orders, setOrders] = useState([]);
   const [searchDate, setSearchDate] = useState('');
 
-  const filteredOrders = completedOrders.filter((order) =>
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const res = await getCompletedOrders();
+        setOrders(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchOrders();
+  }, []);
+
+  const filteredOrders = orders.filter((order) =>
     order.date.toLowerCase().includes(searchDate.toLowerCase())
   );
 
@@ -36,24 +37,16 @@ const CompletedOrders = () => {
       <div className="space-y-4">
         {filteredOrders.map((order) => (
           <div
-            key={order.id}
-            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative" // Added 'relative' for positioning context
+            key={order._id}
+            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative"
           >
-            {/* Package Icon */}
             <div className="flex-shrink-0 mb-4">
-              <span className="text-2xl text-[#A67C52]">📦</span> {/* Placeholder for package icon */}
+              <span className="text-2xl text-[#A67C52]">📦</span>
             </div>
-
-            {/* Order Details */}
             <div className="flex-1">
-              {/* Items */}
               <p className="text-[#6A3917] font-medium">
-                {order.items
-                  .map((item) => `${item.productName} x ${item.quantity}`)
-                  .join(', ')}
+                {order.items.map((item) => `${item.productName} x ${item.quantity}`).join(', ')}
               </p>
-
-              {/* Customer, Address, Phone, Date, ID, Payment */}
               <p className="text-sm text-[#6A3917]">
                 {order.customerName}
                 <br />
@@ -63,19 +56,15 @@ const CompletedOrders = () => {
                 <br />
                 Date: {order.date}
                 <br />
-                Order ID: {order.id}
+                Order ID: {order._id}
                 <br />
                 Payment: {order.paymentMethod === 'online' ? 'Online' : 'COD'}
               </p>
             </div>
-
-            {/* Items Count and Total */}
             <div className="text-right flex-shrink-0 space-y-1 mt-4 md:mt-2">
               <p className="text-sm text-[#6A3917]">Items: {order.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
               <p className="text-lg font-bold text-[#6A3917]">₦{order.total.toLocaleString()}</p>
             </div>
-
-            {/* Status (Read-only) - Positioned at top right using absolute positioning */}
             <div className="absolute top-3 right-3 flex-shrink-0">
               <select
                 value={order.orderStatus}

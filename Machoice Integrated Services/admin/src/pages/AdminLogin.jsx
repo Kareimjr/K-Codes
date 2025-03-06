@@ -1,35 +1,38 @@
 // src/pages/AdminLogin.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../contexts/AuthContext';
 
 const AdminLogin = () => {
-  // Initialize state from localStorage if available, otherwise use default values
-  const [isLogin, setIsLogin] = useState(() => {
-    return localStorage.getItem('isLogin') ? JSON.parse(localStorage.getItem('isLogin')) : true;
-  });
-  const [email, setEmail] = useState(() => localStorage.getItem('email') || '');
-  const [password, setPassword] = useState(() => localStorage.getItem('password') || '');
-  const [name, setName] = useState(() => localStorage.getItem('name') || '');
-  const [confirmPassword, setConfirmPassword] = useState(() => localStorage.getItem('confirmPassword') || '');
+  const { login, signup } = useContext(AuthContext);
+  const [searchParams] = useSearchParams();
+  const defaultIsLogin = searchParams.get('isLogin') !== 'false';
+  const [isLogin, setIsLogin] = useState(defaultIsLogin);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
 
-  // Sync state to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('isLogin', JSON.stringify(isLogin));
-    localStorage.setItem('email', email);
-    localStorage.setItem('password', password);
-    localStorage.setItem('name', name);
-    localStorage.setItem('confirmPassword', confirmPassword);
-  }, [isLogin, email, password, name, confirmPassword]);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isLogin) {
-      console.log('Admin login attempt:', { email, password });
-    } else {
-      console.log('Admin signup attempt:', { name, email, password, confirmPassword });
+    try {
+      if (isLogin) {
+        await login({ email, password });
+        toast.success("Login Successful");
+        navigate("/", { replace: true });
+      } else {
+        if (password !== confirmPassword) {
+          return toast.error('Passwords do not match');
+        }
+        await signup({ name, email, password });
+        toast.success("Signup Successful");
+        navigate("/", { replace: true });
+      }
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Authentication error');
     }
-    // Optionally clear sensitive fields after submission
-    // setPassword('');
-    // setConfirmPassword('');
   };
 
   return (
@@ -64,7 +67,7 @@ const AdminLogin = () => {
               />
             </div>
           )}
-          
+
           <div>
             <label htmlFor="email" className="text-sm font-medium text-gray-700">
               Admin Email

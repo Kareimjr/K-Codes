@@ -3,3 +3,7 @@
 body {
     font-family: 'Outfit';
   }
+
+  .my-swal-popup {
+  font-size: 0.9rem; /* Smaller font size */
+}

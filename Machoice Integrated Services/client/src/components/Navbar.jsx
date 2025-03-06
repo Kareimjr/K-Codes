@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center space-x-32">
             <Link to="/" className="flex items-center">
-              <img src={assets.logo} alt="Logo" className="h-20 w-auto" />
+              <img src={assets.logo} alt="Logo" className="h-16 w-auto" />
             </Link>
 
             <div className="hidden md:flex space-x-6 font-semibold">
@@ -89,24 +89,28 @@ const Navbar = () => {
             <Link
               to="/"
               className="ml-8 block mobile-nav-link text-[#6A3917] hover:text-[#5A2F13]"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/about"
               className="ml-8 block mobile-nav-link text-[#6A3917] hover:text-[#5A2F13]"
+              onClick={() => setMobileMenuOpen(false)}
             >
               About Us
             </Link>
             <Link
               to="/services"
               className="ml-8 block mobile-nav-link text-[#6A3917] hover:text-[#5A2F13]"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Services
             </Link>
             <Link
               to="/products"
               className="ml-8 block mobile-nav-link text-[#6A3917] hover:text-[#5A2F13]"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Products
             </Link>
@@ -114,6 +118,7 @@ const Navbar = () => {
               <Link
                 to="/login"
                 className="ml-8 flex items-center space-x-2 text-[#6A3917] hover:text-[#5A2F13]"
+                onClick={() => setMobileMenuOpen(false)}
               >
                 <User className="w-5 h-5" />
                 <span>My Account</span>

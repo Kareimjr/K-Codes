@@ -1,12 +1,13 @@
 // src/pages/AdminResetPassword.js
 import React, { useState } from 'react';
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { sendOtp, verifyOtp, resetPassword } from '../services/services';
+import { toast } from 'react-toastify';
 
 const AdminResetPassword = () => {
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false);
-  const [otp, setOtp] = useState('');
   const [isOtpValid, setIsOtpValid] = useState(false);
   const inputRef = React.useRef([]);
   
@@ -41,42 +42,50 @@ const AdminResetPassword = () => {
     });
   };
 
-  const onSubmitEmail = (e) => {
+  const onSubmitEmail = async (e) => {
     e.preventDefault();
     setLoadingEmail(true);
-    // API call removed; simulate success for UI flow
-    setTimeout(() => {
+    try {
+      const res = await sendOtp({ email });
+      toast.success(res.data.message);
       setIsEmailSent(true);
-      setLoadingEmail(false);
-    }, 1000); // Simulated delay
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Error sending OTP');
+    }
+    setLoadingEmail(false);
   };
 
-  const onSubmitOTP = (e) => {
+  const onSubmitOTP = async (e) => {
     e.preventDefault();
     setLoadingOtp(true);
     const otpArray = inputRef.current.map((el) => el.value);
-    setOtp(otpArray.join(''));
-    // API call removed; simulate success for UI flow
-    setTimeout(() => {
+    const enteredOtp = otpArray.join('');
+    try {
+      const res = await verifyOtp({ email, otp: enteredOtp });
+      toast.success(res.data.message);
       setIsOtpValid(true);
-      setLoadingOtp(false);
-    }, 1000); // Simulated delay
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Error verifying OTP');
+    }
+    setLoadingOtp(false);
   };
 
-  const onSubmitNewPassword = (e) => {
+  const onSubmitNewPassword = async (e) => {
     e.preventDefault();
     setLoadingNewPassword(true);
-    // API call removed; simulate success for UI flow
-    setTimeout(() => {
-      setLoadingNewPassword(false);
-      // Normally would navigate to login here
-    }, 1000); // Simulated delay
+    try {
+      const res = await resetPassword({ email, newPassword });
+      toast.success(res.data.message);
+      // Optionally navigate to login page after successful reset
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Error resetting password');
+    }
+    setLoadingNewPassword(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex items-center justify-center px-4">
       <div className="max-w-[400px] w-full bg-white rounded-xl shadow-2xl p-6">
-        {/* === EMAIL FORM === */}
         {!isEmailSent && (
           <>
             <div className="text-center mb-6">
@@ -84,7 +93,6 @@ const AdminResetPassword = () => {
               <p className="text-gray-600 text-lg mt-2">Enter your registered admin email</p>
               <p className="text-sm text-gray-500 mt-1">Authorized personnel only</p>
             </div>
-
             <form onSubmit={onSubmitEmail} className="flex flex-col gap-4">
               <div>
                 <label htmlFor="email" className="text-sm font-medium text-gray-700">
@@ -100,7 +108,6 @@ const AdminResetPassword = () => {
                   required
                 />
               </div>
-
               <button
                 type="submit"
                 disabled={loadingEmail}
@@ -111,15 +118,12 @@ const AdminResetPassword = () => {
             </form>
           </>
         )}
-
-        {/* === OTP FORM === */}
         {!isOtpValid && isEmailSent && (
           <>
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Reset Password OTP</h2>
               <p className="text-gray-600 text-lg mt-2">Enter the 6-digit code sent to your email</p>
             </div>
-
             <form onSubmit={onSubmitOTP} className="flex flex-col gap-4">
               <div className="flex justify-between" onPaste={handlePaste}>
                 {Array(6).fill().map((_, index) => (
@@ -135,7 +139,6 @@ const AdminResetPassword = () => {
                   />
                 ))}
               </div>
-
               <button
                 type="submit"
                 disabled={loadingOtp}
@@ -146,15 +149,12 @@ const AdminResetPassword = () => {
             </form>
           </>
         )}
-
-        {/* === NEW PASSWORD FORM === */}
         {isOtpValid && isEmailSent && (
           <>
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900">New Password</h2>
               <p className="text-gray-600 text-lg mt-2">Enter your new admin password</p>
             </div>
-
             <form onSubmit={onSubmitNewPassword} className="flex flex-col gap-4">
               <div className="relative">
                 <label htmlFor="new-password" className="text-sm font-medium text-gray-700">
@@ -177,7 +177,6 @@ const AdminResetPassword = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-
               <button
                 type="submit"
                 disabled={loadingNewPassword}

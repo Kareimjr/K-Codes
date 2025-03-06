@@ -1,10 +1,11 @@
+// src/admin/components/AdminNavbar.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, LogOut, UserPlus } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import { Transition } from '@headlessui/react';
 import { assets } from '../assets/asset';
 
-const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
+const AdminNavbar = ({ links = [], onLogout, isAdmin = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -13,15 +14,14 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
 
   return (
     <nav className="bg-gradient-to-br from-[#F5E8DF] to-[#E9D8C7] py-2 shadow-xl w-full z-50">
-      <div className="px-2 sm:px-6 lg:px-10">
+      <div className="px-3 sm:px-6 lg:px-10">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
-            <Link to={isAdmin ? "/admin" : "/"} className="flex items-center">
+            <Link to="/" className="flex items-center">
               <img src={assets.logo} alt="Logo" className="h-16 w-auto" />
-              <h2 className='font-bold text-[#6A3917]'>Admin Panel</h2>
+              <h2 className="ml-2 text-xl font-bold text-[#6A3917]">Admin Panel</h2>
             </Link>
           </div>
-
           <div className="flex items-center space-x-6">
             {isAdmin && onLogout && (
               <button
@@ -43,7 +43,6 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
         </div>
       </div>
 
-      {/* Mobile Menu with Transition */}
       <Transition
         show={mobileMenuOpen}
         enter="transition-opacity duration-800 ease-out"
@@ -54,7 +53,7 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
         leaveTo="opacity-0"
       >
         <div className="md:hidden bg-gradient-to-br from-[#F5E8DF] to-[#E9D8C7] mt-2 border-t">
-          <div className="py-5 space-y-4 font-semibold">
+          <div className="py-5 space-y-2 font-semibold">
             {links.map((link, index) => (
               <Link
                 key={index}
@@ -68,7 +67,7 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
             {isAdmin && onLogout && (
               <div className="pt-4 border-t">
                 <Link
-                  to="/create-admin"
+                  to="/auth?isLogin=false"
                   className="ml-8 mb-2 block mobile-nav-link text-[#6A3917] hover:text-[#5A2F13]"
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -93,4 +92,4 @@ const Navbar = ({ links = [], onLogout, isAdmin = false }) => {
   );
 };
 
-export default Navbar;
+export default AdminNavbar;

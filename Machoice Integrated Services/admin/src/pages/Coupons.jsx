@@ -1,25 +1,83 @@
-import React, { useState } from 'react';
-import { Trash2 } from 'lucide-react';
+// src/admin/pages/Coupons.js
+import React, { useState, useEffect } from 'react';
+import { Trash2, Edit } from 'lucide-react';
+import { getCoupons, createCoupon, deleteCoupon, updateCoupon } from '../services/services';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-const initialCoupons = [
-  { id: 1, title: 'SUMMER10', discount: 10, usageLimit: 100, usageCount: 0, expiration: '2023-12-31' },
-];
+const MySwal = withReactContent(Swal);
 
 const Coupons = () => {
-  const [coupons, setCoupons] = useState(initialCoupons);
-  const [newCoupon, setNewCoupon] = useState({ title: '', discount: '', usageLimit: '', usageCount: 0, expiration: '' });
+  const [coupons, setCoupons] = useState([]);
+  const [newCoupon, setNewCoupon] = useState({ title: '', discount: '', usageLimit: '', expiration: '' });
+  const [editCoupon, setEditCoupon] = useState(null); // State for editing a coupon
 
-  const handleAddCoupon = (e) => {
-    e.preventDefault();
-    const coupon = { ...newCoupon, id: Date.now(), usageCount: 0 }; // Temporary ID, replace with backend-generated ID
-    setCoupons([...coupons, coupon]);
-    setNewCoupon({ title: '', discount: '', usageLimit: '', usageCount: 0, expiration: '' });
-    // Add your backend API call here to save the coupon
+  const fetchCoupons = async () => {
+    try {
+      const res = await getCoupons();
+      setCoupons(res.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDeleteCoupon = (id) => {
-    setCoupons(coupons.filter((coupon) => coupon.id !== id));
-    // Add your backend API call here to delete the coupon
+  useEffect(() => {
+    fetchCoupons();
+  }, []);
+
+  const handleAddCoupon = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await createCoupon(newCoupon);
+      toast.success(res.data.message);
+      setNewCoupon({ title: '', discount: '', usageLimit: '', expiration: '' });
+      fetchCoupons();
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Error creating coupon');
+    }
+  };
+
+  const handleEditCouponSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await updateCoupon(editCoupon._id, editCoupon);
+      toast.success(res.data.message);
+      setEditCoupon(null); // Clear edit form after submission
+      fetchCoupons();
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Error updating coupon');
+    }
+  };
+
+  const handleDeleteCoupon = async (id) => {
+    const result = await MySwal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this coupon?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      width: "300px",
+    });
+    if (!result.isConfirmed) return;
+    try {
+      const res = await deleteCoupon(id);
+      toast.success(res.data.message);
+      fetchCoupons();
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Error deleting coupon');
+    }
+  };
+
+  const handleEditCoupon = (coupon) => {
+    setEditCoupon({
+      _id: coupon._id,
+      title: coupon.title,
+      discount: coupon.discount,
+      usageLimit: coupon.usageLimit,
+      expiration: new Date(coupon.expiration).toISOString().substring(0, 10),
+    });
   };
 
   return (
@@ -34,7 +92,7 @@ const Coupons = () => {
             placeholder="Coupon Title"
             value={newCoupon.title}
             onChange={(e) => setNewCoupon({ ...newCoupon, title: e.target.value })}
-            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917] text-xs md:text-sm"
+            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
             required
           />
           <input
@@ -42,7 +100,7 @@ const Coupons = () => {
             placeholder="Discount Percentage"
             value={newCoupon.discount}
             onChange={(e) => setNewCoupon({ ...newCoupon, discount: e.target.value })}
-            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917] text-xs md:text-sm"
+            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
             required
           />
           <input
@@ -50,56 +108,109 @@ const Coupons = () => {
             placeholder="Usage Limit"
             value={newCoupon.usageLimit}
             onChange={(e) => setNewCoupon({ ...newCoupon, usageLimit: e.target.value })}
-            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917] text-xs md:text-sm"
+            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
             required
           />
           <input
             type="date"
             value={newCoupon.expiration}
             onChange={(e) => setNewCoupon({ ...newCoupon, expiration: e.target.value })}
-            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917] text-xs md:text-sm"
+            className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
             required
           />
         </div>
         <button
           type="submit"
-          className="bg-gradient-to-r from-[#6A3917] to-[#A67C52] text-white py-2 px-4 rounded-lg hover:from-[#5A2F13] hover:to-[#935F3B] transition text-xs md:text-sm"
+          className="bg-gradient-to-r from-[#6A3917] to-[#A67C52] text-white py-2 px-4 rounded-lg hover:from-[#5A2F13] hover:to-[#935F3B] transition"
         >
           Add Coupon
         </button>
       </form>
 
-      {/* List of Coupons (Card-based) */}
+      {/* Edit Coupon Form */}
+      {editCoupon && (
+        <form onSubmit={handleEditCouponSubmit} className="mb-6 space-y-4">
+          <h3 className="text-lg font-bold text-[#6A3917]">Edit Coupon</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              placeholder="Coupon Title"
+              value={editCoupon.title}
+              onChange={(e) => setEditCoupon({ ...editCoupon, title: e.target.value })}
+              className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
+              required
+            />
+            <input
+              type="number"
+              placeholder="Discount Percentage"
+              value={editCoupon.discount}
+              onChange={(e) => setEditCoupon({ ...editCoupon, discount: e.target.value })}
+              className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
+              required
+            />
+            <input
+              type="number"
+              placeholder="Usage Limit"
+              value={editCoupon.usageLimit}
+              onChange={(e) => setEditCoupon({ ...editCoupon, usageLimit: e.target.value })}
+              className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
+              required
+            />
+            <input
+              type="date"
+              value={editCoupon.expiration}
+              onChange={(e) => setEditCoupon({ ...editCoupon, expiration: e.target.value })}
+              className="p-2 border border-[#A67C52] rounded-lg focus:outline-none focus:border-[#6A3917]"
+              required
+            />
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="flex-1 bg-gradient-to-r from-[#6A3917] to-[#A67C52] text-white py-2 px-4 rounded-lg hover:from-[#5A2F13] hover:to-[#935F3B] transition"
+            >
+              Update Coupon
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditCoupon(null)}
+              className="flex-1 bg-gray-300 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-400 transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Coupon List */}
       <div className="space-y-4">
         {coupons.map((coupon) => (
           <div
-            key={coupon.id}
-            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative"
+            key={coupon._id}
+            className="border border-[#D7B9A5] rounded-lg p-4 bg-[#F5E8DF] shadow-sm relative flex"
           >
-            {/* Coupon Icon (Using a gift icon as a placeholder, similar to package) */}
-            <div className="flex-shrink-0 mb-2">
-              <span className="text-2xl text-[#A67C52]">🎁</span> {/* Placeholder for coupon/gift icon */}
+            <div className="flex-shrink-0 mr-4">
+              <span className="text-3xl text-[#A67C52]">🎁</span>
             </div>
-
-            {/* Coupon Details */}
-            <div className="flex-1">
-              <p className="text-[#6A3917] font-medium">
-                {coupon.title} - {coupon.discount}% Off
-              </p>
+            <div>
+              <p className="text-[#6A3917] font-medium">{coupon.title} - {coupon.discount}% Off</p>
               <p className="text-sm text-[#6A3917]">
-                Usage: {coupon.usageCount}/{coupon.usageLimit}
-                <br />
+                Usage: {coupon.usageCount}/{coupon.usageLimit}<br />
                 Expires: {new Date(coupon.expiration).toLocaleDateString()}
               </p>
             </div>
-
-            {/* Actions (Delete Button) - Positioned at top right using absolute positioning */}
-            <div className="absolute top-3 right-3 flex-shrink-0">
+            <div className="absolute top-2 right-2 flex space-x-2">
               <button
-                onClick={() => handleDeleteCoupon(coupon.id)}
+                onClick={() => handleEditCoupon(coupon)}
+                className="text-[#6A3917] hover:text-[#5A2F13] p-2"
+              >
+                <Edit className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleDeleteCoupon(coupon._id)}
                 className="text-red-600 hover:text-red-800 p-2"
               >
-                <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
+                <Trash2 className="w-4 h-4" />
               </button>
             </div>
           </div>

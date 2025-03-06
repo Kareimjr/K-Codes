@@ -1,7 +1,11 @@
+// src/pages/AddProduct.js
 import React, { useState } from 'react';
+import { addProduct } from '../services/services';
+import { toast } from 'react-toastify';
 
 const AddProduct = () => {
-  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -9,26 +13,38 @@ const AddProduct = () => {
   const [isBestSeller, setIsBestSeller] = useState(false);
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
       const reader = new FileReader();
-      reader.onloadend = () => setImage(reader.result);
-      reader.readAsDataURL(file);
+      reader.onloadend = () => setImagePreview(reader.result);
+      reader.readAsDataURL(selectedFile);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const product = { 
-      image, 
-      name, 
-      description, 
-      quantity: Number(quantity), 
-      price: Number(price),
-      isBestSeller 
-    };
-    console.log('Product to add:', product);
-    // Add backend API call here
+    const formData = new FormData();
+    if (file) formData.append('image', file);
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('quantity', quantity);
+    formData.append('price', price);
+    formData.append('isBestSeller', isBestSeller);
+    try {
+      const response = await addProduct(formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      toast.success(response.data.message);
+      // Optionally reset form fields
+      setFile(null);
+      setImagePreview(null);
+      setName('');
+      setDescription('');
+      setQuantity('');
+      setPrice('');
+      setIsBestSeller(false);
+    } catch (error) {
+      toast.error(error.response?.data.message || 'Error adding product');
+    }
   };
 
   return (
@@ -46,8 +62,8 @@ const AddProduct = () => {
               id="product-image"
             />
             <label htmlFor="product-image" className="cursor-pointer text-[#6A3917] hover:text-[#5A2F13]">
-              {image ? (
-                <img src={image} alt="Preview" className="w-32 h-32 object-cover mx-auto rounded" />
+              {imagePreview ? (
+                <img src={imagePreview} alt="Preview" className="w-32 h-32 object-cover mx-auto rounded" />
               ) : (
                 <span>Drag & drop or click to upload</span>
               )}

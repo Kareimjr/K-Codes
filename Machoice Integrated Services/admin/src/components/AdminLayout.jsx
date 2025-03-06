@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// src/admin/components/AdminLayout.js
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import {
   PlusCircle,
@@ -6,18 +7,20 @@ import {
   ShoppingCart,
   CheckCircle,
   Palette,
-  X,
   Tag,
   ChevronLeft,
   ChevronRight,
   LogOut,
   UserPlus,
-  XCircle, // Added for "Canceled Orders"
+  XCircle,
+  Users, // Added for Team tab
 } from 'lucide-react';
 import AdminNavbar from './AdminNavbar';
 import { assets } from '../assets/asset';
+import { AuthContext } from '../contexts/AuthContext';
 
-const AdminLayout = ({ onLogout }) => {
+const AdminLayout = () => {
+  const { logout } = useContext(AuthContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -30,7 +33,6 @@ const AdminLayout = ({ onLogout }) => {
     return () => window.removeEventListener('resize', updateMedia);
   }, []);
 
-  // Common icon props
   const iconProps = {
     stroke: "#6A3917",
     strokeWidth: 2,
@@ -43,9 +45,10 @@ const AdminLayout = ({ onLogout }) => {
     { name: 'List of Products', icon: <List {...iconProps} />, path: '/products' },
     { name: 'Orders', icon: <ShoppingCart {...iconProps} />, path: '/orders' },
     { name: 'Completed Orders', icon: <CheckCircle {...iconProps} />, path: '/completed-orders' },
-    { name: 'Canceled Orders', icon: <XCircle {...iconProps} />, path: '/canceled-orders' }, // Added here
+    { name: 'Canceled Orders', icon: <XCircle {...iconProps} />, path: '/canceled-orders' },
     { name: 'Branding', icon: <Palette {...iconProps} />, path: '/branding' },
     { name: 'Coupons', icon: <Tag {...iconProps} />, path: '/coupons' },
+    { name: 'Team', icon: <Users {...iconProps} />, path: '/team' }, // Added Team tab
   ];
 
   const adminLinks = [
@@ -53,19 +56,19 @@ const AdminLayout = ({ onLogout }) => {
     { to: '/products', label: 'List of Products' },
     { to: '/orders', label: 'Orders' },
     { to: '/completed-orders', label: 'Completed Orders' },
-    { to: '/canceled-orders', label: 'Canceled Orders' }, // Added here
+    { to: '/canceled-orders', label: 'Canceled Orders' },
     { to: '/branding', label: 'Branding' },
     { to: '/coupons', label: 'Coupons' },
+    { to: '/team', label: 'Team' }, // Added Team link
   ];
 
   return (
     <div className="min-h-screen bg-[#F5E8DF]">
-      {/* Mobile Navbar: Only render on mobile/sm screens */}
       {isMobile && (
-        <AdminNavbar links={adminLinks} onLogout={onLogout} isAdmin={true} />
+        <AdminNavbar links={adminLinks} onLogout={logout} isAdmin={true} />
       )}
 
-      {/* Desktop Sidebar: Hidden on mobile and sm; visible on md+ */}
+      {/* Desktop Sidebar */}
       <div
         className={`hidden md:block fixed h-screen bg-white shadow-xl transition-all duration-100 z-50 ${
           isSidebarOpen ? 'w-64' : 'w-16'
@@ -73,7 +76,7 @@ const AdminLayout = ({ onLogout }) => {
       >
         <div className="flex flex-col h-full p-4">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-5">
             <Link to="/admin" className="flex items-center gap-2 overflow-hidden">
               {isSidebarOpen && (
                 <>
@@ -101,24 +104,19 @@ const AdminLayout = ({ onLogout }) => {
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 space-y-2">
+          <nav className="flex-1 space-y-0">
             {sidebarItems.map((item, index) => (
               <Link
                 key={index}
                 to={item.path}
-                className="group relative flex items-center p-2 rounded-lg hover:bg-[#E9D8C7] transition text-[#6A3917]"
+                className="group relative flex items-center p-1.5 rounded-lg hover:bg-[#E9D8C7] transition text-[#6A3917]"
               >
-                {/* Icon */}
                 <div className="inline-block">{item.icon}</div>
-
-                {/* Display text label inline if sidebar is open */}
                 {isSidebarOpen ? (
                   <span className="ml-3 text-sm">{item.name}</span>
                 ) : (
-                  // Tooltip on hover when sidebar is closed
                   <span
-                    className="absolute left-full ml-4 px-2 py-1 bg-white text-sm rounded shadow-lg
-                               opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap"
+                    className="absolute left-full ml-4 px-2 py-1 bg-white text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap"
                   >
                     {item.name}
                   </span>
@@ -129,8 +127,8 @@ const AdminLayout = ({ onLogout }) => {
 
           {/* Create New Admin Button */}
           <Link
-            to="/create-admin"
-            className="group relative flex items-center p-2 rounded-lg mt-4 hover:bg-[#E9D8C7] transition text-[#6A3917]"
+            to="/auth?isLogin=false"
+            className="group relative flex items-center p-1.5 rounded-lg mt-4 hover:bg-[#E9D8C7] transition text-[#6A3917]"
           >
             <div className="inline-block">
               <UserPlus {...iconProps} />
@@ -139,8 +137,7 @@ const AdminLayout = ({ onLogout }) => {
               <span className="ml-3 text-sm">Create Admin</span>
             ) : (
               <span
-                className="absolute left-full ml-4 px-2 py-1 bg-white text-sm rounded shadow-lg
-                           opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap"
+                className="absolute left-full ml-4 px-2 py-1 bg-white text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap"
               >
                 Create Admin
               </span>
@@ -149,8 +146,8 @@ const AdminLayout = ({ onLogout }) => {
 
           {/* Logout Button */}
           <button
-            onClick={onLogout}
-            className="group relative flex items-center p-2 rounded-lg hover:bg-[#E9D8C7] transition text-[#6A3917]"
+            onClick={logout}
+            className="group relative flex items-center p-1.5 rounded-lg hover:bg-[#E9D8C7] transition text-[#6A3917] cursor-pointer"
           >
             <div className="inline-block">
               <LogOut {...iconProps} />
@@ -159,8 +156,7 @@ const AdminLayout = ({ onLogout }) => {
               <span className="ml-3">Logout</span>
             ) : (
               <span
-                className="absolute left-full ml-4 px-2 py-1 bg-white text-sm rounded shadow-lg
-                           opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap"
+                className="absolute left-full ml-4 px-2 py-1 bg-white text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap"
               >
                 Logout
               </span>
@@ -169,14 +165,10 @@ const AdminLayout = ({ onLogout }) => {
         </div>
       </div>
 
-      {/* Main Content with a little margin */}
+      {/* Main Content */}
       <main
         className={`pt-4 transition-all duration-300 ${
-          isMobile
-            ? 'px-4'
-            : isSidebarOpen
-            ? 'md:ml-64 md:pl-4'
-            : 'md:ml-20 md:pl-4'
+          isMobile ? 'px-4' : isSidebarOpen ? 'md:ml-64 md:pl-4' : 'md:ml-20 md:pl-4'
         }`}
       >
         <Outlet />

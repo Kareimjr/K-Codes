@@ -1,3 +1,4 @@
+// src/services/services.js
 import axiosInstance from './axiosInstance';
 
 // Auth
@@ -7,6 +8,7 @@ export const adminLogout = () => axiosInstance.post('/admin/auth/logout');
 export const sendOtp = (data) => axiosInstance.post('/admin/auth/send-otp', data);
 export const verifyOtp = (data) => axiosInstance.post('/admin/auth/verify-otp', data);
 export const resetPassword = (data) => axiosInstance.post('/admin/auth/reset-password', data);
+export const authCheck = () => axiosInstance.get('/admin/auth/check'); // <-- Added export
 
 // Products
 export const addProduct = (data, config) => axiosInstance.post('/admin/products', data, config);
@@ -24,7 +26,22 @@ export const getCanceledOrders = () => axiosInstance.get('/admin/orders/canceled
 export const getBranding = () => axiosInstance.get('/admin/branding');
 export const updateBranding = (data, config) => axiosInstance.post('/admin/branding', data, config);
 
+export const deleteBrandingAsset = (asset, index) => {
+    if (asset === 'banner') {
+      return axiosInstance.delete(`/admin/branding/${asset}?index=${index}`);
+    }
+    return axiosInstance.delete(`/admin/branding/${asset}`);
+  };
+  
+
 // Coupons
 export const createCoupon = (data) => axiosInstance.post('/admin/coupons', data);
 export const getCoupons = () => axiosInstance.get('/admin/coupons');
 export const deleteCoupon = (id) => axiosInstance.delete(`/admin/coupons/${id}`);
+export const updateCoupon = (id, data) => axiosInstance.put(`/admin/coupons/${id}`, data);
+
+//Team
+export const getTeam = () => axiosInstance.get('/admin/team');
+export const createTeam = (data, config) => axiosInstance.post('/admin/team', data, config);
+export const updateTeam = (id, data, config) => axiosInstance.put(`/admin/team/${id}`, data, config);
+export const deleteTeam = (id) => axiosInstance.delete(`/admin/team/${id}`);
