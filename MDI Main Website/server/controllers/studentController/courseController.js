@@ -70,11 +70,6 @@ const getStudentViewCourseDetails = async (req, res) => {
             userId: studentId
         })
 
-        // console.log("studentId:", studentId);
-        // console.log("courseId:", id);
-        // console.log("studentCourses:", studentCourses);
-        // console.log("studentCourses.courses:", studentCourses.courses);
-
         const ifStudentAlreadyBoughtCurrentCourse = studentCourses && studentCourses.courses
             ? studentCourses.courses.findIndex(item => item.courseId.toString() === id) > -1  
             : false;

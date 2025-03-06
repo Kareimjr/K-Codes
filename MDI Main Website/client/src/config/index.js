@@ -1,14 +1,9 @@
 export const languageOptions = [
-    { id: "english", label: "English" },
-    { id: "spanish", label: "Spanish" },
-    { id: "french", label: "French" },
-    { id: "german", label: "German" },
-    { id: "chinese", label: "Chinese" },
-    { id: "japanese", label: "Japanese" },
-    { id: "korean", label: "Korean" },
-    { id: "portuguese", label: "Portuguese" },
-    { id: "arabic", label: "Arabic" },
-    { id: "russian", label: "Russian" },
+    { id: "English", label: "English" },
+    { id: "French", label: "French" },
+    { id: "Arabic", label: "Arabic" },
+    { id: "Spanish", label: "Spanish" },
+    { id: "German", label: "German" },
   ];
   
   export const courseLevelOptions = [
@@ -18,16 +13,14 @@ export const languageOptions = [
   ];
   
   export const courseCategories = [
-    { id: "web-development", label: "Web Development" },
+    { id: "front-development", label: "Frontend Development" },
     { id: "backend-development", label: "Backend Development" },
     { id: "data-science", label: "Data Science" },
-    { id: "machine-learning", label: "Machine Learning" },
+    { id: "data-analytics", label: "Data Analytics" },
     { id: "artificial-intelligence", label: "Artificial Intelligence" },
     { id: "cloud-computing", label: "Cloud Computing" },
     { id: "cyber-security", label: "Cyber Security" },
     { id: "mobile-development", label: "Mobile Development" },
-    { id: "game-development", label: "Game Development" },
-    { id: "software-engineering", label: "Software Engineering" },
   ];
   
   export const courseLandingPageFormControls = [
@@ -116,7 +109,6 @@ export const languageOptions = [
       title: "",
       videoUrl: "",
       freePreview: false,
-      public_id: "",
     },
   ];
   

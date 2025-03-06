@@ -7,40 +7,50 @@ const markCurrentLectureAsViewed = async (req, res) => {
   try {
     const { userId, courseId, lectureId } = req.body;
 
-    let progress = await CourseProgress.findOne({ userId, courseId });
-    if (!progress) {
-      progress = new CourseProgress({
-        userId,
-        courseId,
-        lecturesProgress: [
-          {
-            lectureId,
-            viewed: true,
-            dateViewed: new Date(),
-          },
-        ],
-      });
-      await progress.save();
-    } else {
-      const lectureProgress = progress.lecturesProgress.find(
-        (item) => item.lectureId.toString() === lectureId.toString()
-      );
+    // Ensure there is a CourseProgress document. Use upsert to create one if needed.
+    let progress = await CourseProgress.findOneAndUpdate(
+      { userId, courseId },
+      {
+        $setOnInsert: {
+          userId,
+          courseId,
+          lecturesProgress: [],
+          completed: false,
+          completionDate: null,
+        },
+      },
+      { new: true, upsert: true }
+    );
 
-      if (lectureProgress) {
-        lectureProgress.viewed = true;
-        lectureProgress.dateViewed = new Date();
-      } else {
-        progress.lecturesProgress.push({
-          lectureId,
-          viewed: true,
-          dateViewed: new Date(),
-        });
-      }
-      await progress.save();
+    // Convert lectureId to string for consistency.
+    const lectureIdStr = lectureId.toString();
+
+    // Check if the lecture is already recorded
+    const lectureIndex = progress.lecturesProgress.findIndex(
+      (item) => item.lectureId.toString() === lectureIdStr
+    );
+
+    if (lectureIndex > -1) {
+      // Update the existing lecture progress.
+      progress.lecturesProgress[lectureIndex].viewed = true;
+      progress.lecturesProgress[lectureIndex].dateViewed = new Date();
+    } else {
+      // Push a new lecture progress entry.
+      progress.lecturesProgress.push({
+        lectureId: lectureIdStr,
+        viewed: true,
+        dateViewed: new Date(),
+      });
     }
 
-    const course = await Course.findById(courseId);
+    // Save the updated progress document.
+    await progress.save();
 
+    // Reload the progress document from the database.
+    progress = await CourseProgress.findOne({ userId, courseId });
+
+    // Retrieve course details to know the total number of lectures.
+    const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({
         success: false,
@@ -48,25 +58,31 @@ const markCurrentLectureAsViewed = async (req, res) => {
       });
     }
 
-    // Check if all the lectures are viewed
-    const allLecturesViewed =
-      progress.lecturesProgress.length === course.curriculum.length &&
-      progress.lecturesProgress.every((item) => item.viewed);
+    // Build a set of unique lecture IDs from the progress.
+    const uniqueLectureIds = new Set(
+      progress.lecturesProgress.map((item) => item.lectureId.toString())
+    );
 
+    // Determine if all lectures are viewed.
+    const allLecturesViewed =
+      uniqueLectureIds.size === course.curriculum.length &&
+      progress.lecturesProgress.every((item) => item.viewed === true);
+
+    // If all lectures are viewed, mark the course as completed.
     if (allLecturesViewed) {
       progress.completed = true;
       progress.completionDate = new Date();
       await progress.save();
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Lecture marked as viewed",
       data: progress,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
+    console.error("Error in markCurrentLectureAsViewed:", error);
+    return res.status(500).json({
       success: false,
       message: "Some error occurred!",
     });
@@ -80,13 +96,11 @@ const getCurrentCourseProgress = async (req, res) => {
 
     const studentPurchasedCourses = await StudentCourses.findOne({ userId });
 
-    // Convert courseId to string for comparison
-    const isCurrentCoursePurchasedByCurrentUserOrNot =
-      studentPurchasedCourses?.courses?.some(
-        (item) => item.courseId.toString() === courseId.toString()
-      );
+    const isPurchased = studentPurchasedCourses?.courses?.some(
+      (item) => item.courseId.toString() === courseId.toString()
+    );
 
-    if (!isCurrentCoursePurchasedByCurrentUserOrNot) {
+    if (!isPurchased) {
       return res.status(200).json({
         success: true,
         data: {
@@ -103,7 +117,7 @@ const getCurrentCourseProgress = async (req, res) => {
 
     if (
       !currentUserCourseProgress ||
-      currentUserCourseProgress?.lecturesProgress?.length === 0
+      currentUserCourseProgress.lecturesProgress.length === 0
     ) {
       const course = await Course.findById(courseId);
       if (!course) {
@@ -126,7 +140,7 @@ const getCurrentCourseProgress = async (req, res) => {
 
     const courseDetails = await Course.findById(courseId);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: {
         courseDetails,
@@ -137,8 +151,8 @@ const getCurrentCourseProgress = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
+    console.error("Error in getCurrentCourseProgress:", error);
+    return res.status(500).json({
       success: false,
       message: "Some error occurred!",
     });
@@ -151,7 +165,6 @@ const resetCurrentCourseProgress = async (req, res) => {
     const { userId, courseId } = req.body;
 
     const progress = await CourseProgress.findOne({ userId, courseId });
-
     if (!progress) {
       return res.status(404).json({
         success: false,
@@ -165,14 +178,14 @@ const resetCurrentCourseProgress = async (req, res) => {
 
     await progress.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Course progress has been reset",
       data: progress,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
+    console.error("Error in resetCurrentCourseProgress:", error);
+    return res.status(500).json({
       success: false,
       message: "Some error occurred!",
     });

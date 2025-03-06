@@ -14,16 +14,19 @@ function PaymentSuccessPage() {
 
       if (success) {
         console.log("Payment Verified:", data);
+        sessionStorage.setItem("paymentVerified", "true");
         navigate("/student/course/mycourses");
       } else {
         console.error("Payment verification failed");
       }
     }
 
-    if (reference) verifyPayment();
+    const paymentVerified = sessionStorage.getItem("paymentVerified");
+
+    if (reference && !paymentVerified) verifyPayment();
   }, [reference, navigate]);
 
-  return <VerifyingLoader/>;
+  return <VerifyingLoader />;
 }
 
 export default PaymentSuccessPage;

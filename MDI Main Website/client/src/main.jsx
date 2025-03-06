@@ -5,16 +5,19 @@ import { BrowserRouter } from 'react-router-dom'
 import { AppContextProvider } from './context/AppContext.jsx';
 import InstructorProvider from './context/InstructorContext';
 import StudentProvider from './context/StudentContext';
+import { BrandingProvider } from './context/BrandingContext';
 
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AppContextProvider>
-      <InstructorProvider>
-        <StudentProvider>
-          <App />
-        </StudentProvider>
-      </InstructorProvider>
+      <BrandingProvider>
+        <InstructorProvider>
+          <StudentProvider>
+            <App />
+          </StudentProvider>
+        </InstructorProvider>
+      </BrandingProvider>
     </AppContextProvider>
   </BrowserRouter>
 

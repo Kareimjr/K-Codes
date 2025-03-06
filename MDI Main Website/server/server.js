@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const mongoose = require('mongoose');
 const authRouter = require('./routes/authRoutes.js');
 const mediaRoutes = require('./routes/instructorRoutes/mediaRoutes.js');
@@ -10,6 +11,10 @@ const studentCourseRoutes = require('./routes/studentRoutes/courseRoutes.js');
 const paymentRoutes = require("./routes/paymentRoutes.js");
 const studentCourseProgressRoute = require("./routes/studentRoutes/courseProgressRoute.js");
 const studentBoughtCoursesRoutes = require("./routes/studentRoutes/studentCoursesRoute.js");
+const brandingRoutes = require('./routes/brandingRoute.js');
+
+
+
 const cookieParser = require('cookie-parser');
 const WebSocket = require('ws');
 
@@ -28,7 +33,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Database connection
 mongoose.connect(MONGO_URI)
@@ -44,6 +49,9 @@ app.use('/student/course', studentCourseRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use('/student/courses-bought', studentBoughtCoursesRoutes);
 app.use('/student/course-progress', studentCourseProgressRoute);
+app.use('/api/branding', brandingRoutes);
+
+
 
 
 app.use((err, req, res, next) => {

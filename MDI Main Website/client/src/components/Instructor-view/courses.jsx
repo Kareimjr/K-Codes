@@ -39,7 +39,7 @@ function InstructorCourses({ listOfCourses }) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {listOfCourses && listOfCourses.length > 0 ? 
+                                {listOfCourses && listOfCourses.length > 0 ?
                                     listOfCourses.map(course => (
                                         <TableRow key={course._id}>
                                             <TableCell className="font-medium">{course.title}</TableCell>
@@ -56,7 +56,7 @@ function InstructorCourses({ listOfCourses }) {
                                                 </Button>
                                             </TableCell>
                                         </TableRow>
-                                    )) : 
+                                    )) :
                                     <TableRow>
                                         <TableCell colSpan="4" className="text-center">No courses found.</TableCell>
                                     </TableRow>

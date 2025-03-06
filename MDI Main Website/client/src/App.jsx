@@ -10,12 +10,14 @@ import StudentHomePage from "./pages/student/studentHome";
 import Loading from "./components/Loading";
 import PageNotFound from "./pages/404";
 import InstructorDashboardPage from "./pages/instructor";
-import AddNewCoursePage from "./pages/instructor/addNewCourse";
+import AddNewCoursePage from "./pages/instructor/AddNewCourse";
 import StudentViewCoursesPage from "./pages/student/courses";
 import StudentViewCourseDetailsPage from "./pages/student/courseDetails";
 import PaymentSuccessPage from "./pages/student/paymentVerification";
 import StudentCoursesPage from "./pages/student/studentCoursesPage";
 import StudentProgressPage from "./pages/student/studentProgressPage";
+import ContactUs from "./components/student-view/contact-us";
+import AboutPage from "./components/student-view/aboutPage";
 
 const App = () => {
   const { isLoggedin, userData, isLoading } = useContext(AppContext);
@@ -80,6 +82,8 @@ const App = () => {
           <Route path="course/details/:id" element={<StudentViewCourseDetailsPage />} />
           <Route path="course/mycourses" element={<StudentCoursesPage />} />
           <Route path="course/progress/:id" element={<StudentProgressPage />} />
+          <Route path="/student/contact-us" element={<ContactUs/>}/>
+          <Route path="/student/about-us" element={<AboutPage/>}/>
           {/* Add more  student routes as needed */}
         </Route>
         <Route path="payment-success" element={<PaymentSuccessPage/>}/>

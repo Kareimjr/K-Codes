@@ -92,3 +92,21 @@ export async function getCurrentCourseProgressService(userId, courseId) {
   
     return data;
   }
+
+  // Branding Services
+// Function to save branding information with file uploads
+export async function saveBrandingService(formData) {
+  const { data } = await axiosInstance.put("/api/branding", formData, {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+  return data;
+}
+
+// Function to fetch branding information remains unchanged
+export async function fetchBrandingService() {
+  const { data } = await axiosInstance.get("/api/branding");
+  return data;
+}

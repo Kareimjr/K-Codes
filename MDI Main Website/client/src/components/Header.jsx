@@ -26,7 +26,7 @@ function Header() {
       <img src={assets.header_img} className="w-36 h-36 rounded-full mb-6" />
 
       <h1 className="flex items-center gap-2 text-xl sm:text-3xl font-medium mb-2">
-        Hey {userData ? userData.name : "developer"}!{" "}
+        Hey {userData ? userData.name : ""}!{" "}
         <img src={assets.hand_wave} className="w-8 aspect-square" />
       </h1>
 
@@ -35,7 +35,7 @@ function Header() {
       </h2>
 
       <p className="mb-8 max-w-md">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+      Unlock Your Potential. Learn Something New Today!
       </p>
 
       <button

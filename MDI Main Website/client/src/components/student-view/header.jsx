@@ -6,39 +6,46 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "../ui/button";
 import { LogOut, TvMinimalPlay } from "lucide-react";
-
-
+import { BrandingContext } from "@/context/BrandingContext";
 
 function StudentViewHeader() {
-
+    const {brandingData} = useContext(BrandingContext)
     const navigate = useNavigate();
-    const { backendUrl, setIsLoggedin, userData, setUserData } = useContext(AppContext); const logout = async () => {
+    const { backendUrl, setIsLoggedin, userData, setUserData } = useContext(AppContext);
+
+    const logout = async () => {
         try {
             axios.defaults.withCredentials = true;
             const { data } = await axios.post(backendUrl + '/api/auth/logout');
-            data.success && setIsLoggedin(false);
-            data.success && setUserData(false);
-            navigate('/');
-            toast.success(data.message);
+            if (data.success) {
+                // Clear session storage
+                sessionStorage.clear();
+                setIsLoggedin(false);
+                setUserData(null);
+                navigate('/');
+                toast.success(data.message);
+            }
         } catch (error) {
             toast.error(error.message);
         }
     };
 
+    const Logo =
+        brandingData?.logo?.url || assets.logo;
+
     return (
-        <div className="w-full flex justify-between items-center pt-6 p-4 sm:px-8 top-0">
+        <div className="w-full flex justify-between items-center pt-6 p-6 sm:px-10 lg:px-16 top-0">
             <div className="flex items-center gap-4">
             <Link to="/student">
-                <img src={assets.logo} className="w-23 sm:w-32" />
+                <img src={Logo} className="w-28 sm:w-32" />
             </Link>
                 <div>
                     <Button onClick={()=> 
                         location.pathname.includes("/courses") 
                         ? null 
-                        : navigate("/student/courses")} variant="ghost" className="border text-[14px] md:text-[16px] font-medium"> Explore Courses</ Button>
+                        : navigate("/student/courses")} variant="ghost" className="border text-[12px] md:text-[16px] font-medium bg-transparent"> Explore Courses</Button>
                 </div>
                 </div>
-
 
                 {userData && (
                     <div className="w-10 h-10 flex justify-center items-center rounded-full bg-[#2A3571] text-white relative group">
@@ -48,11 +55,11 @@ function StudentViewHeader() {
                                 <li onClick={()=>navigate("/student/course/mycourses")} className="py-1 px-2 flex gap-2 items-center font-medium hover:bg-gray-200 cursor-pointer">
                                     <TvMinimalPlay width={20}/> My Courses</li>
                                 <li onClick={logout} className="py-1 px-2 flex gap-2 items-center font-medium hover:bg-gray-200 cursor-pointer">
-                                    <LogOut width={20}/>
-                                    Logout</li>
+                                    <LogOut width={20}/> Logout</li>
                             </ul>
                         </div>
-                    </div>)}
+                    </div>
+                )}
         </div>
     );
 }

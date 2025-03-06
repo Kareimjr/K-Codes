@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const userAuth = async (req, res, next) => {
-    const { token } = req.cookies;
+    const token = req.cookies.token; // Assuming the token is in a cookie named 'token'
 
     if (!token) {
         return res.status(401).json({
@@ -13,14 +13,13 @@ const userAuth = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Attach all decoded information to req.body
-        req.body.user = {
+        // Attach all decoded information to req.user instead of req.body
+        req.user = {
             id: decoded.id,
             name: decoded.name,
             email: decoded.email,
             role: decoded.role
         };
-
 
         next();
 
@@ -28,7 +27,7 @@ const userAuth = async (req, res, next) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: 'Token verification failed: ' + error.message,
         });
     }
 };

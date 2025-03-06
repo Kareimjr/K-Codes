@@ -12,7 +12,7 @@ function Loading() {
                     ></div>
                 </div>
             </div>
-        </div>
+        </div> 
     );
 }
 

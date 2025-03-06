@@ -84,7 +84,7 @@ function StudentViewCoursesPage() {
       },[])
 
     return (
-        <div className="container mx-auto p-4">
+        <div className=" p-6 sm:px-14">
             <h1 className="text-3xl font-bold mb-4">All Courses</h1>
             <div className="flex flex-col md:flex-row gap-4">
                 <aside className="w-full md:w-64 space-y-4">
@@ -136,7 +136,7 @@ function StudentViewCoursesPage() {
                                 </DropdownMenuRadioGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <span className="text-sm text-black font-bold">{studentViewCoursesList.length} Results</span>
+                        <span className="text-sm text-black font-bold">{studentViewCoursesList.length} {studentViewCoursesList.length <= 1 ? "Result" : "Results"}</span>
                     </div>
                     <div className="space-y-4">
                         {
@@ -145,8 +145,8 @@ function StudentViewCoursesPage() {
                         {
                             studentViewCoursesList && studentViewCoursesList.length > 0 ? studentViewCoursesList.map(courseItem => (
                                 <Card onClick={()=>navigate(`/student/course/details/${courseItem?._id}`)} className="cursor-pointer bg-transparent hover:scale-105 transition-transform duration-300 ease-in-out" key={courseItem?._id}>
-                                    <CardContent className="flex gap-4 p-4">
-                                        <div className="w-48 h-32 flex-shrink-0">
+                                    <CardContent className="flex flex-col sm:flex-row gap-4 p-4">
+                                        <div className="w-full sm:w-48 h-32 flex-shrink-0">
                                             <img src={courseItem?.image} className="w-full h-full object-cover rounded-sm" />
                                         </div>
                                         <div className="flex-1">

@@ -17,12 +17,14 @@ export const AppContextProvider = (props) => {
         try {
             const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
             console.log("Auth State Data:", data);
+            console.log("Cookies:", document.cookie); // Log cookies to check if token is present
             if (data.success) {
                 setIsLoggedin(true);
                 await getUserData();
             } else {
                 setIsLoggedin(false);
                 setUserData(null);
+                toast.error(data.message); // Show why authentication failed
             }
         } catch (error) {
             console.error("Error fetching auth state:", error.message);
@@ -32,11 +34,13 @@ export const AppContextProvider = (props) => {
             setIsLoading(false);
         }
     };
+    
 
     const getUserData = async () => {
         try {
             const { data } = await axios.get(backendUrl + '/api/user/data');
             console.log("User Data:", data);
+            console.log("Cookies:", document.cookie); // Log cookies to check if token is present
             if (data.success) {
                 setUserData(data.userData);
             } else {
