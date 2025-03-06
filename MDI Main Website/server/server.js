@@ -21,14 +21,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
-// CORS configuration
+// ✅ Fix: CORS Configuration (without trailing slash)
 const corsOptions = {
-    origin: process.env.CLIENT_URL,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: [process.env.CLIENT_URL, 'https://mdihub.vercel.app'],  // Removed trailing slash
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Ensure OPTIONS is included
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));  // ✅ Fix: Handle preflight requests
 
 // Parse JSON, URL-encoded data, and cookies
 app.use(express.json());
